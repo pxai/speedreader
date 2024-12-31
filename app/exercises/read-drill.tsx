@@ -6,33 +6,30 @@ import { useTranslation } from "react-i18next";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import useLoadText from '@/hooks/useLoadText';
-import splitTextIntoLines from '../services/split-text-into-lines';
-
 
 const TIMETOREAD = 5;
 
-export default function ReadScreen() { // Change this to load different articles
+export default function ReadDrill() { // Change this to load different articles
   const { i18n, t } = useTranslation();
   const currentLanguage = i18n.language;
 
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [isReading, setIsReading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(TIMETOREAD);
   const [wordCount, setWordCount] = useState(0);
-  const [showResult, setShowResult]= useState(false);
-  const [showStats, setShowStats] = useState(false)
-  const {text, loading, error} = useLoadText()
-  const articleText = text;
+  const [showResult, setShowResult] = useState(false);
+  const [showStats, setShowStats] = useState(false);
+  const { text, loading, error } = useLoadText();
+  const articleText = text.join(' ');
 
   useEffect(() => {
-    let timer : any;
+    let timer: any;
     if (isReading && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft(prevTime => prevTime - 1);
       }, 1000);
     } else if (timeLeft === 0) {
       setIsReading(false);
-      setShowResult(true)
+      setShowResult(true);
     }
     return () => clearInterval(timer);
   }, [isReading, timeLeft]);
@@ -44,19 +41,8 @@ export default function ReadScreen() { // Change this to load different articles
   const startReading = () => {
     setIsReading(true);
     setTimeLeft(TIMETOREAD);
-    setCurrentLineIndex(0);
-    setWordCount(0);
-  };
-
-  const showNextLine = () => {
-    if (currentLineIndex < articleText.length - 1) {
-      setCurrentLineIndex(currentLineIndex + 1);
-      const wordsInLine = articleText[currentLineIndex].split(' ').length;
-      setWordCount(prevCount => prevCount + wordsInLine);
-    } else {
-      setIsReading(false);
-      setShowResult(true)
-    }
+    setWordCount(articleText.split(' ').length);
+    setShowResult(false);
   };
 
   return (
@@ -64,26 +50,14 @@ export default function ReadScreen() { // Change this to load different articles
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
-      <View style={styles.exercise}>
-          <Text>{isReading ? articleText[currentLineIndex] : "Press Start to read the article"}</Text>
-
-          {isReading && <Button title="Next Line" onPress={showNextLine} disabled={!isReading} />}
-          {showStats && <Text>Time left: {timeLeft} seconds</Text>}
-          {showStats || showResult &&
-            <Text>Read words: {wordCount}</Text>
-          }
+        <View style={styles.exercise}>
+          <Text>{isReading ? articleText : "Press Start to read the article"}</Text>
+          <Button title="Start" onPress={startReading} disabled={isReading} />
+          <Text>Time left: {timeLeft} seconds</Text>
+          {showResult && <Text>Total words read: {wordCount}</Text>}
+          <Button title="Toggle Stats" onPress={toggleShowStats} />
+          {showStats && <Text>Stats: ...</Text>}
         </View>
-        {!isReading &&
-          <View>
-            <Switch
-              trackColor={{false: '#767577', true: '#81b0ff'}}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleShowStats}
-              value={showStats}
-            /><Text>Show stats</Text>
-          </View>
-        }
-        {!isReading && <Button title="Start" onPress={startReading} disabled={isReading} />}
       </ThemedView>
     </ParallaxScrollView>
   );

@@ -6,29 +6,20 @@ import { ThemedView } from '@/components/ThemedView';
 import { ExerciseTitle } from '@/components/ExerciseTitle';
 import { useNavigation } from '@react-navigation/native';
 
-export default function TalkScreen() {
+export default function ReadScreen() {
   const navigation = useNavigation();
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Talk</ThemedText>
+        <ThemedText type="title">Read</ThemedText>
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
-        <ExerciseTitle href="exercises/repeat" icon="mic-outline" name="Repeat" description="Repeat words" />
+      <ExerciseTitle href="exercises/read" icon="flash-outline" name="Read Speed" description="Determine your WPM" />
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
-        <ExerciseTitle href="exercises/read" icon="book-outline" name="Read" description="Read" />
-      </ThemedView>
-      <ThemedView style={styles.titleContainer}>
-        <ExerciseTitle href="exercises/chat-repeat" icon="chatbubble-outline" name="Chat Repeat" description="Chat Repeat words" />
-      </ThemedView>
-      <ThemedView style={styles.titleContainer}>
-        <ExerciseTitle href="exercise-sing" icon="musical-notes-outline" name="Singing!" description="Sing exercise" />
-      </ThemedView>
-      <ThemedView style={styles.titleContainer}>
-        <ExerciseTitle href="exercise-chat" icon="people-outline" name="Conversation" description="Real conversation exercise" />
+        <ExerciseTitle href="exercises/read-drill" icon="book-outline" name="Read drill" description="Read Drill exercise" />
       </ThemedView>
       <ThemedText>Let's talk</ThemedText>
     </ParallaxScrollView>

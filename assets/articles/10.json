@@ -1,0 +1,7 @@
+{
+  "article": {
+    "title": "Symmetrischema nanum",
+    "text": "Symmetrischema nanum is a moth in the family Gelechiidae. It was described by Povolný in 1989. It is found in Argentina.\n\n\n== References =="
+  },
+  "quiz": "{\n  \"quiz\": [\n    {\n      \"question\": \"What is Symmetrischema nanum?\",\n      \"options\": [\n        {\"A\": \"A bird\"},\n        {\"B\": \"A moth\"},\n        {\"C\": \"A butterfly\"},\n        {\"D\": \"A beetle\"}\n      ],\n      \"answer\": \"B\"\n    },\n    {\n      \"question\": \"Which family does Symmetrischema nanum belong to?\",\n      \"options\": [\n        {\"A\": \"Lepidoptera\"},\n        {\"B\": \"Araneae\"},\n        {\"C\": \"Gelechiidae\"},\n        {\"D\": \"Coleoptera\"}\n      ],\n      \"answer\": \"C\"\n    },\n    {\n      \"question\": \"Who described Symmetrischema nanum?\",\n      \"options\": [\n        {\"A\": \"Povolný\"},\n        {\"B\": \"Darwin\"},\n        {\"C\": \"Newton\"},\n        {\"D\": \"Einstein\"}\n      ],\n      \"answer\": \"A\"\n    },\n    {\n      \"question\": \"In what year was Symmetrischema nanum described?\",\n      \"options\": [\n        {\"A\": \"1956\"},\n        {\"B\": \"1989\"},\n        {\"C\": \"2001\"},\n        {\"D\": \"2010\"}\n      ],\n      \"answer\": \"B\"\n    },\n    {\n      \"question\": \"Where is Symmetrischema nanum found?\",\n      \"options\": [\n        {\"A\": \"United States\"},\n        {\"B\": \"Russia\"},\n        {\"C\": \"Argentina\"},\n        {\"D\": \"Australia\"}\n      ],\n      \"answer\": \"C\"\n    }\n  ]\n}"
+}
