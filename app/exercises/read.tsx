@@ -1,19 +1,21 @@
 import {useEffect, useState} from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, View, Button, Text, Switch } from 'react-native';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTranslation } from "react-i18next";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import useLoadText from '@/hooks/useLoadText';
 import splitTextIntoLines from '../services/split-text-into-lines';
+import useAsyncStorage from '@/hooks/useStorage';
 
 
 const TIMETOREAD = 5;
 
 export default function ReadScreen() { // Change this to load different articles
   const { i18n, t } = useTranslation();
-  const currentLanguage = i18n.language;
+  const currentLanguage = i18n.languages[1];
+  const {readData, writeData, setCurrentUser } = useAsyncStorage();
 
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [isReading, setIsReading] = useState(false);
@@ -21,7 +23,7 @@ export default function ReadScreen() { // Change this to load different articles
   const [wordCount, setWordCount] = useState(0);
   const [showResult, setShowResult]= useState(false);
   const [showStats, setShowStats] = useState(false)
-  const {text, loading, error} = useLoadText()
+  const {text, loading, error} = useLoadText(currentLanguage)
   const articleText = text;
 
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function ReadScreen() { // Change this to load different articles
     } else if (timeLeft === 0) {
       setIsReading(false);
       setShowResult(true)
+      saveWPM();
     }
     return () => clearInterval(timer);
   }, [isReading, timeLeft]);
@@ -56,8 +59,15 @@ export default function ReadScreen() { // Change this to load different articles
     } else {
       setIsReading(false);
       setShowResult(true)
+      saveWPM();
     }
   };
+
+  const saveWPM = async () => {
+    const wpm = await readData('wpm');
+    wpm.push(wordCount);
+    await writeData('wpm', JSON.stringify(wpm))
+  }
 
   return (
     <ParallaxScrollView

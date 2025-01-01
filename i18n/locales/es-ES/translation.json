@@ -1,11 +1,18 @@
 {
   "language": "ES",
-  "home": {
-    "title": "Inicio",
-    "welcome": "Bienvenido",
-    "subtitle": "Example i18n App!",
-    "description": "This is an example React Native application demonstrating how to implement internationalization (i18n) using react-i18next. The app allows users to switch between different languages for a more localized experience."
-  },
+  "title": "Inicio",
+  "welcome": "Bienvenido",
+  "subtitle": "Example i18n App!",
+  "description": "Use this app to improve your reading speed: start measuring your current speed and then move to exercises.",
+  "home": "Inicio",
+  "read": "Lectura",
+  "help": "Ayuda",
+  "read_speed": "Velocidad de lectura",
+  "determine_wpm": "Mide tu velocidad",
+  "read_drill": "Rutinas de lectura",
+  "read_drill_exercise": "Ejercicios de lectura rápida",
+  "current_speed": "Velocidad actual",
+  "wpm": "PPM",
   "features": {
     "title": "Features"
     }

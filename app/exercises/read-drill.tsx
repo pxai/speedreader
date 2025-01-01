@@ -1,25 +1,30 @@
 import {useEffect, useState} from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, View, Button, Text, Switch } from 'react-native';
+import { StyleSheet, View, Button, Text, Switch, TextStyle } from 'react-native';
 
 import { useTranslation } from "react-i18next";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import useLoadText from '@/hooks/useLoadText';
 
-const TIMETOREAD = 5;
+const TIMETOREAD = 35;
 
 export default function ReadDrill() { // Change this to load different articles
   const { i18n, t } = useTranslation();
   const currentLanguage = i18n.language;
+  const drillSpeeds: number[] = [3000, 1500, 750];
 
+  const [currentDrill, setCurrentDrill] = useState(0);
+  const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [isReading, setIsReading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(TIMETOREAD);
   const [wordCount, setWordCount] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [currentWords, setCurrentWords] = useState<number>();
   const { text, loading, error } = useLoadText();
-  const articleText = text.join(' ');
+  const [currentLines, setCurrentLines] = useState<string[]>([])
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     let timer: any;
@@ -38,11 +43,42 @@ export default function ReadDrill() { // Change this to load different articles
     setShowStats(prevShowStats => !prevShowStats);
   };
 
-  const startReading = () => {
+  const startReading = (speed: number = 0) => {
+    setCurrentDrill(speed);
+    setCurrentLines(text)
     setIsReading(true);
     setTimeLeft(TIMETOREAD);
-    setWordCount(articleText.split(' ').length);
+    setWordCount(text.length);
     setShowResult(false);
+  };
+
+  useEffect(() => {
+    let timer2: any;
+    if (isReading && timeLeft > 0) {
+      timer2 = setInterval(() => {
+        showNextLine()
+      }, drillSpeeds[currentDrill]);
+    }
+    return () => clearInterval(timer2);
+  }, [isReading]);
+
+  const showNextLine = () => {
+    console.log(text.length, drillSpeeds[currentDrill], currentLineIndex)
+    if (isReading && currentLineIndex < text.length - 1) {
+      setCurrentLineIndex(prevIndex => prevIndex + 1)
+    }
+  };
+
+  const getDynamicOpacity = (i: number): TextStyle => ({
+    color: (i + 5) < currentLineIndex  ? 'gray' : 'black',
+    display: i > currentLineIndex + 5 ? 'none' : 'flex'
+  });
+
+  const showCurrentWords = (i: number) => {
+    const totalText = text.slice(0, i);
+
+    console.log(totalText.join(' ').split(' ').length)
+    setCurrentWords(totalText.join(' ').split(' ').length)
   };
 
   return (
@@ -51,12 +87,23 @@ export default function ReadDrill() { // Change this to load different articles
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
         <View style={styles.exercise}>
-          <Text>{isReading ? articleText : "Press Start to read the article"}</Text>
-          <Button title="Start" onPress={startReading} disabled={isReading} />
+          {!isReading &&  <Text>{t('press_start_to')}</Text>}
+          {isReading &&
+            text.map((t,i)=> <Text
+              key={i} onPress={()=>showCurrentWords(i)}
+              onPressIn={() => setIsHovered(true)} // Simulates hover start
+              onPressOut={() => setIsHovered(false)} // Simulates hover end
+              style={[styles.textContainer, getDynamicOpacity(i)]}>{t}</Text>)
+          }
+          <Button title={t('press_start')} onPress={() => startReading(0)} disabled={isReading} />
+          <Button title={t('press_start_x2')} onPress={() => startReading(1)} disabled={isReading} />
+          <Button title={t('press_start_x3')} onPress={() => startReading(2)} disabled={isReading} />
           <Text>Time left: {timeLeft} seconds</Text>
           {showResult && <Text>Total words read: {wordCount}</Text>}
           <Button title="Toggle Stats" onPress={toggleShowStats} />
           {showStats && <Text>Stats: ...</Text>}
+          {currentWords}
+          {currentWords && t('wpm') }
         </View>
       </ThemedView>
     </ParallaxScrollView>
@@ -71,6 +118,11 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: 'column',
+    gap: 8,
+  },
+  textContainer: {
+    flexDirection: 'column',
+    width: 500,
     gap: 8,
   },
   exercise: {
@@ -92,6 +144,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     display: 'flex',
     flexDirection: 'row',
+  },
+  hoveredBox: {
+    backgroundColor: 'blue',
   },
   phraseWordContainer: {
     borderBottomWidth: 4, // Thickness of the underline

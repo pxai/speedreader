@@ -1,11 +1,13 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { useTranslation } from "react-i18next";
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
+  const { i18n, t } = useTranslation();
   const colorScheme = useColorScheme();
 
   return (
@@ -17,7 +19,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: t('home'),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
           ),
@@ -26,7 +28,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="read"
         options={{
-          title: 'Read',
+          title: t('read'),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'book' : 'book-outline'} color={color} />
           ),
@@ -35,7 +37,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="help"
         options={{
-          title: 'Help',
+          title: t('help'),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'help' : 'help-outline'} color={color} />
           ),

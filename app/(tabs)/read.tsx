@@ -1,5 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Image, Platform } from 'react-native';
+import { useTranslation } from "react-i18next";
+
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -7,19 +9,20 @@ import { ExerciseTitle } from '@/components/ExerciseTitle';
 import { useNavigation } from '@react-navigation/native';
 
 export default function ReadScreen() {
+  const { i18n, t } = useTranslation();
   const navigation = useNavigation();
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Read</ThemedText>
+        <ThemedText type="title">{t('read')}</ThemedText>
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
-      <ExerciseTitle href="exercises/read" icon="flash-outline" name="Read Speed" description="Determine your WPM" />
+      <ExerciseTitle href="exercises/read" icon="flash-outline" name={t('read_speed')} description={t('determine_wpm')} />
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
-        <ExerciseTitle href="exercises/read-drill" icon="book-outline" name="Read drill" description="Read Drill exercise" />
+        <ExerciseTitle href="exercises/read-drill" icon="book-outline" name={t('read_drill')} description={t('read_drill_exercise')} />
       </ThemedView>
       <ThemedText>Let's talk</ThemedText>
     </ParallaxScrollView>
