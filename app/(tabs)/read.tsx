@@ -24,7 +24,9 @@ export default function ReadScreen() {
       <ThemedView style={styles.titleContainer}>
         <ExerciseTitle href="exercises/read-drill" icon="book-outline" name={t('read_drill')} description={t('read_drill_exercise')} />
       </ThemedView>
-      <ThemedText>Let's talk</ThemedText>
+      <ThemedView style={styles.titleContainer}>
+        <ExerciseTitle href="exercises/vision-span" icon="eye-outline" name={t('vision_span')} description={t('vision_span_exercise')} />
+      </ThemedView>
     </ParallaxScrollView>
   );
 }

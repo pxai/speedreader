@@ -13,6 +13,12 @@
   "read_drill_exercise": "Ejercicios de lectura rápida",
   "current_speed": "Velocidad actual",
   "wpm": "PPM",
+  "press_start": "Empezar",
+  "press_start_to": "Empezar a leer",
+  "press_start_x2": "Leer x2",
+  "press_start_x3": "Leer x3",
+  "vision_span": "Campo visual",
+  "vision_span_exercise": "Ejercicio de campo visual",
   "features": {
     "title": "Features"
     }
