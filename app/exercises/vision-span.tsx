@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import useLoadText from '@/hooks/useLoadText';
-import splitTextIntoLines from '../services/split-text-into-lines';
+import characterGenerator from '../services/character-generator';
 import useAsyncStorage from '@/hooks/useStorage';
 
 
@@ -17,57 +17,18 @@ export default function VisionSpanScreen() { // Change this to load different ar
   const currentLanguage = i18n.languages[1];
   const {readData, writeData, setCurrentUser } = useAsyncStorage();
 
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
-  const [isReading, setIsReading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(TIMETOREAD);
-  const [wordCount, setWordCount] = useState(0);
-  const [showResult, setShowResult]= useState(false);
-  const [showStats, setShowStats] = useState(false)
+  const [currentText, setCurrentText] = useState('');
+
   const {text, loading, error} = useLoadText(currentLanguage)
   const articleText = text;
 
-  useEffect(() => {
-    let timer : any;
-    if (isReading && timeLeft > 0) {
-      timer = setInterval(() => {
-        setTimeLeft(prevTime => prevTime - 1);
-      }, 1000);
-    } else if (timeLeft === 0) {
-      setIsReading(false);
-      setShowResult(true)
-      saveWPM();
-    }
-    return () => clearInterval(timer);
-  }, [isReading, timeLeft]);
 
-  const toggleShowStats = () => {
-    setShowStats(prevShowStats => !prevShowStats);
+  const showNext = () => {
+    console.log('showNext: ', characterGenerator(3).join(''));
+    setCurrentText(characterGenerator(3).join(''));
   };
 
-  const startReading = () => {
-    setIsReading(true);
-    setTimeLeft(TIMETOREAD);
-    setCurrentLineIndex(0);
-    setWordCount(0);
-  };
 
-  const showNextLine = () => {
-    if (currentLineIndex < articleText.length - 1) {
-      setCurrentLineIndex(currentLineIndex + 1);
-      const wordsInLine = articleText[currentLineIndex].split(' ').length;
-      setWordCount(prevCount => prevCount + wordsInLine);
-    } else {
-      setIsReading(false);
-      setShowResult(true)
-      saveWPM();
-    }
-  };
-
-  const saveWPM = async () => {
-    const wpm = await readData('wpm');
-    wpm.push(wordCount);
-    await writeData('wpm', JSON.stringify(wpm))
-  }
 
   return (
     <ParallaxScrollView
@@ -75,25 +36,10 @@ export default function VisionSpanScreen() { // Change this to load different ar
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
       <View style={styles.exercise}>
-          <Text>{isReading ? articleText[currentLineIndex] : "Press Start to read the article"}</Text>
-
-          {isReading && <Button title="Next Line" onPress={showNextLine} disabled={!isReading} />}
-          {showStats && <Text>Time left: {timeLeft} seconds</Text>}
-          {showStats || showResult &&
-            <Text>Read words: {wordCount}</Text>
-          }
-        </View>
-        {!isReading &&
-          <View>
-            <Switch
-              trackColor={{false: '#767577', true: '#81b0ff'}}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleShowStats}
-              value={showStats}
-            /><Text>Show stats</Text>
-          </View>
-        }
-        {!isReading && <Button title="Start" onPress={startReading} disabled={isReading} />}
+          <Text>Focus on the center</Text>
+          <Text>{currentText}</Text>
+        <Button title="Start" onPress={showNext} />
+       </View>
       </ThemedView>
     </ParallaxScrollView>
   );
