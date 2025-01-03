@@ -17,18 +17,28 @@ export default function VisionSpanScreen() { // Change this to load different ar
   const currentLanguage = i18n.languages[1];
   const {readData, writeData, setCurrentUser } = useAsyncStorage();
 
-  const [currentText, setCurrentText] = useState('');
+  const [currentText, setCurrentText] = useState<React.JSX.Element[]>([]);
 
   const {text, loading, error} = useLoadText(currentLanguage)
   const articleText = text;
 
 
-  const showNext = () => {
-    console.log('showNext: ', characterGenerator(3).join(''));
-    setCurrentText(characterGenerator(3).join(''));
+  const showNext3 = () => {
+    const characters =  characterGenerator(3)
+    setCurrentText(characters.map((char, i) => <Text key={i} style={styles.phraseWord}>{char}</Text>));
   };
 
+  const showNext5 = () => {
+    let characters =  characterGenerator(5)
+    characters = [characters[0], characters.slice(1,4).join(''), characters[4]]
+    setCurrentText(characters.map((char, i) => <Text key={i} style={styles.spanText}>{char}</Text>));
+  };
 
+  const showNext7 = () => {
+    let characters =  characterGenerator(7)
+    characters = [characters[0], characters[1], characters.slice(2, 5).join(''), characters[5], characters[6]]
+    setCurrentText(characters.map((char, i) => <Text key={i} style={styles.spanText}>{char}</Text>));
+  };
 
   return (
     <ParallaxScrollView
@@ -37,9 +47,11 @@ export default function VisionSpanScreen() { // Change this to load different ar
       <ThemedView style={styles.titleContainer}>
       <View style={styles.exercise}>
           <Text>Focus on the center</Text>
-          <Text>{currentText}</Text>
-        <Button title="Start" onPress={showNext} />
+          <View style={styles.viewSpan}>{currentText}</View>
        </View>
+       <Button title="Start 3" onPress={showNext3} />
+       <Button title="Start 5" onPress={showNext5} />
+       <Button title="Start 7" onPress={showNext7} />
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -60,13 +72,26 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '90%',
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 10,
   },
   transcript: {
     display: 'none',
   },
   transcriptShow: {
     display: 'block',
+  },
+  viewSpan: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 500,
+  },
+  spanText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginRight: 5,
   },
   currentPhrase: {
     marginTop: 20,
