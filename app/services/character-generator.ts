@@ -1,5 +1,5 @@
-export default function characterGenerator(length: number, withLoweCase: boolean = false, withNumbers: boolean = false): string[] {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + (withLoweCase ? 'abcdefghijklmnopqrstuvwxyz' : '') + (withNumbers ? '0123456789' : '');
+export default function characterGenerator(length: number, withLowerCase: boolean = false, withNumbers: boolean = false): string[] {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + (withLowerCase ? 'abcdefghijklmnopqrstuvwxyz' : '') + (withNumbers ? '0123456789' : '');
   const charactersLength = characters.length;
   const result = [];
   for (let i = 0; i < length; i++) {

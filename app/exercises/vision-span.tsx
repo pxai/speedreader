@@ -16,6 +16,8 @@ export default function VisionSpanScreen() { // Change this to load different ar
   const { i18n, t } = useTranslation();
   const currentLanguage = i18n.languages[1];
   const {readData, writeData, setCurrentUser } = useAsyncStorage();
+  const [withLowerCase, setWithLowerCase] = useState(false);
+  const [withNumbers, setWithNumbers] = useState(false);
 
   const [currentText, setCurrentText] = useState<React.JSX.Element[]>([]);
 
@@ -24,20 +26,28 @@ export default function VisionSpanScreen() { // Change this to load different ar
 
 
   const showNext3 = () => {
-    const characters =  characterGenerator(3)
+    const characters =  characterGenerator(3, withLowerCase, withNumbers)
     setCurrentText(characters.map((char, i) => <Text key={i} style={styles.phraseWord}>{char}</Text>));
   };
 
   const showNext5 = () => {
-    let characters =  characterGenerator(5)
+    let characters =  characterGenerator(5, withLowerCase, withNumbers)
     characters = [characters[0], characters.slice(1,4).join(''), characters[4]]
     setCurrentText(characters.map((char, i) => <Text key={i} style={styles.spanText}>{char}</Text>));
   };
 
   const showNext7 = () => {
-    let characters =  characterGenerator(7)
+    let characters =  characterGenerator(7, withLowerCase, withNumbers)
     characters = [characters[0], characters[1], characters.slice(2, 5).join(''), characters[5], characters[6]]
     setCurrentText(characters.map((char, i) => <Text key={i} style={styles.spanText}>{char}</Text>));
+  };
+
+  const toggleLowercase = () => {
+    setWithLowerCase(!withLowerCase);
+  };
+
+  const toggleNumbers = () => {
+    setWithNumbers(!withNumbers);
   };
 
   return (
@@ -52,6 +62,20 @@ export default function VisionSpanScreen() { // Change this to load different ar
        <Button title="Start 3" onPress={showNext3} />
        <Button title="Start 5" onPress={showNext5} />
        <Button title="Start 7" onPress={showNext7} />
+       <View>
+            <Switch
+              trackColor={{false: '#767577', true: '#81b0ff'}}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleLowercase}
+              value={withLowerCase}
+            /><Text>Lowercase</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#81b0ff'}}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleNumbers}
+              value={withNumbers}
+            /><Text>Numbers</Text>
+          </View>
       </ThemedView>
     </ParallaxScrollView>
   );
